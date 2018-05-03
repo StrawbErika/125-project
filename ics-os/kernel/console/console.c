@@ -29,6 +29,33 @@
   
 /*A console mode get string function terminates
 upon receving \r */
+int days_in_month[]={0,31,28,31,30,31,30,31,31,30,31,30,31};
+char *months[]={
+	" ",
+	"\n\n\nJanuary",
+	"\n\n\nFebruary",
+	"\n\n\nMarch",
+	"\n\n\nApril",
+	"\n\n\nMay",
+	"\n\n\nJune",
+	"\n\n\nJuly",
+	"\n\n\nAugust",
+	"\n\n\nSeptember",
+	"\n\n\nOctober",
+	"\n\n\nNovember",
+	"\n\n\nDecember"
+};
+
+char *days[]={
+	"Sun",
+	"Mon",
+	"Tue",
+	"Wed",
+	"Thurs",
+	"Fri",
+	"Sat"
+};
+
 void getstring(char *buf, DEX32_DDL_INFO *dev){
    unsigned int i=0;
    char c;
@@ -818,8 +845,37 @@ int console_execute(const char *str){
       }else{
          printf("console: cannot find device.\n");
       }   
+   }else
+      if (strcmp(u,"cal") == 0){   //-- Runs the graphics demonstration.
+            u=strtok(0," ");
+            int  i = atoi (u);
+            int year = i;
+            int daycode = determinedaycode(year);
+            determineleapyear(year);
+            calendar(year, daycode);
+            printf("\n");
+   }
+   else
+   if (strcmp(u,"date") == 0){   //-- Displays date and time.
+      u=strtok(0," ");
+      // if (u!=0){
+   	
+      // }
+      
+      // Wed May  2 11:37:58 +08 2018
 
-   }else{         //treat the command as an executable
+      int monthNum = time_systime.month;
+      int day = 6;
+      int hour = time_systime.hour;
+      hour = hour + 8;
+      int minutes = time_systime.min;
+      int weekday  = (day += monthNum < 3 ? time_systime.year-- : time_systime.year - 2, 23*monthNum/9 + day + 4 + time_systime.year/4- time_systime.year/100 + time_systime.year/400)%7; 
+
+
+	printf("%s %d %d:%d:%d %d", months[monthNum], days[weekday], hour, minutes, time_systime.sec, time_systime.year );
+   }
+// https://www.boost.org/doc/libs/1_38_0/doc/html/boost/date_time/base_time.html
+   else{         //treat the command as an executable
       if (u!=0){
          if (!user_execp(u, 0, str))
             printf("Undefined console command.\n");
@@ -829,6 +885,57 @@ int console_execute(const char *str){
    return 1;
 };
 
+int determinedaycode(int year){
+	int daycode;
+	int d1, d2, d3;
+	
+	d1 = (year - 1)/ 4.0;
+	d2 = (year - 1)/ 100;
+	d3 = (year - 1)/ 400;
+	daycode = (year + d1 - d2 + d3) %7;
+	return daycode;
+}
+
+int determineleapyear(int year){
+	if(year% 4 == 0 && year%100 != 0 || year%400 == 0){
+		days_in_month[2] = 29;
+		return 1;
+	}
+	else{
+		days_in_month[2] = 28;
+		return 0;
+	}
+}
+
+void calendar(int year, int daycode){
+	int month, day;
+	for ( month = 1; month <= 12; month++ ){
+		printf("%s", months[month]);
+		printf("\n\nSun  Mon  Tue  Wed  Thu  Fri  Sat\n" );
+		
+		// Correct the position for the first date
+		for ( day = 1; day <= 1 + daycode * 5; day++ ){
+			printf(" ");
+		}
+		
+		// Print all the dates for one month
+		for ( day = 1; day <= days_in_month[month]; day++ ){
+			printf("%2d", day );
+			
+			// Is day before Sat? Else start next line Sun.
+			if ( ( day + daycode ) % 7 > 0 )
+				printf("   " );
+			else
+				printf("\n " );
+		}
+			// Set position for next month
+			daycode = ( daycode + days_in_month[month] ) % 7;
+	}
+}
+
+int getDayName(int day, int month, int year){
+
+}
 int console_new(){
    //create a new console         
    char consolename[255];
