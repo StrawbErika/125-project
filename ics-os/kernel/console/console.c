@@ -26,10 +26,10 @@
 */
 
 #include "console.h"
-  
+
 /*A console mode get string function terminates
 upon receving \r */
-int days_in_month[]={0,31,28,31,30,31,30,31,31,30,31,30,31};
+int daysInMonth[]={0,31,28,31,30,31,30,31,31,30,31,30,31};
 char *months[]={
 	" ",
 	"\n\n\nJanuary",
@@ -45,7 +45,38 @@ char *months[]={
 	"\n\n\nNovember",
 	"\n\n\nDecember"
 };
+char *noNewLineMonths[]={
+	" ",
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December"
+};
 
+
+char *abbrvMonths[]={
+	" ",
+	"Jan",
+	"Feb",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"Aug",
+	"Sept",
+	"Oct",
+	"Nov",
+	"Dec"
+};
 char *days[]={
 	"Sun",
 	"Mon",
@@ -54,6 +85,16 @@ char *days[]={
 	"Thurs",
 	"Fri",
 	"Sat"
+};
+
+char *fullDays[]={
+	"Sunday",
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday"
 };
 
 void getstring(char *buf, DEX32_DDL_INFO *dev){
@@ -858,23 +899,102 @@ int console_execute(const char *str){
    else
    if (strcmp(u,"date") == 0){   //-- Displays date and time.
       u=strtok(0," ");
-      // if (u!=0){
-   	
-      // }
-      
-      // Wed May  2 11:37:58 +08 2018
+      if (u!=0){
+         	if (strcmp(u,"-d") == 0){
+                  u=strtok(0," ");
+                  if (u!=0){
+                        if (strcmp(u,"now") == 0){ 
+                              givenDate(0, 0, 0);
+                        }
+                        else if (strcmp(u,"yesterday") == 0){
+                              givenDate(-1, 0, 0);
+                        }
+                        else if (strcmp(u,"tomorrow") == 0){
+                              givenDate(1, 0, 0);
+                        }
+                        else if (strcmp(u,"today") == 0){
+                              givenDate(0, 0, 0);
+                        }
+                        else if (strcmp(u,"sunday") == 0){
+                              findSunday(1);
+                        }
+                        else if (strcmp(u,"last-sunday") == 0){ //fucked >:( if march 3 last sunday was feb something
+                              findSunday(-1);
+                        }
+                        else if (strcmp(u,"last-week") == 0){ //fucked >:( if march 3 last week was feb something
+                              givenDate(-7, 0, 0);
+                        }
+                        else if (strcmp(u,"next-week") == 0){
+                              givenDate(+7, 0, 0);
+                        }
+                        else if (strcmp(u,"last-month") == 0){
+                              givenDate(0, -1, 0);
+                        }
+                        else if (strcmp(u,"last-year") == 0){
+                              givenDate(0, 0, -1);
+                        }
+                        else if (strcmp(u,"next-year") == 0){
+                              givenDate(0, 0, 1);
+                        }
+                        else if (strcmp(u[0],'"') == 0){ //if surrounded by quotes (function if ")
+                              if(checkDateFormat(u) == 1){
+                                    formatToDay(u);
+                              }
+                              else{
+                                    printf("Invalid date function\n");
+                              }
+                        }
+                        else{ //if 02/02/2018 or 2018/02/02
+                              if(checkFormat(u) == 1){
+                                    returnDate(u);
+                              }
+                              else{
+                                    printf("Invalid date function\n");
+                              }
+                        }
+                  }else{
+                        printf("Invalid date function");
+                  }
+            }
+            else if (strcmp(u,"+") == 0){// loop thru function to find %
+                  if(u!=0){
+                        char temp[1000];
 
-      int monthNum = time_systime.month;
-      int day = 6;
-      int hour = time_systime.hour;
-      hour = hour + 8;
-      int minutes = time_systime.min;
-      int weekday  = (day += monthNum < 3 ? time_systime.year-- : time_systime.year - 2, 23*monthNum/9 + day + 4 + time_systime.year/4- time_systime.year/100 + time_systime.year/400)%7; 
+                        temp[0] = '\0';
 
-
-	printf("%s %d %d:%d:%d %d", months[monthNum], days[weekday], hour, minutes, time_systime.sec, time_systime.year );
+                        while(u!=NULL){
+                              u=strtok(0," "); //date + hoi this is date
+                              strcat(temp, " "); //hoi pls potato , hoiplspotato
+                              if(strcmp(u,"%a") == 0){
+                                    currentDate(1, temp);
+                              }
+                              else if(strcmp(u,"%B") == 0){ //month name
+                                    currentDate(2, temp);
+                              }
+                              else if(strcmp(u,"%b") == 0){ //abbrv month name
+                                    currentDate(3, temp);
+                              }
+                              else if(strcmp(u,"%y") == 0){ //year
+                                    currentDate(4, temp);
+                              }
+                              else if(strcmp(u,"%V") == 0){ //week number
+                                    currentDate(5, temp);
+                              }
+                              else if(strcmp(u,"$A") == 0){ //full weekday name
+                                    currentDate(6, temp);
+                              }
+                              else{
+                                    strcat(temp, u); //hoi pls potato , hoiplspotato
+                              }
+                        }
+                        printf("%s\n", temp);
+                  }
+            }
+      }
+      else{
+            givenDate(0, 0, 0);
+      }
    }
-// https://www.boost.org/doc/libs/1_38_0/doc/html/boost/date_time/base_time.html
    else{         //treat the command as an executable
       if (u!=0){
          if (!user_execp(u, 0, str))
@@ -884,6 +1004,212 @@ int console_execute(const char *str){
    //normal termination
    return 1;
 };
+
+// date -d "yyyy-mm-dd" +"%A"
+		// Determine which day of the week a given date was
+
+int checkDateFormat(char temp[]){// 01/11/2019 
+      int checker = 0;
+      char month[3];
+      char day[3];
+      char year[5];
+      if(temp[5] == '-' && temp[8] == '-'){
+
+            year[0] = temp[1];
+            year[1] = temp[2];
+            year[2] = temp[3];
+            year[3] = temp[4];
+            year[4] = '\0';
+            month[0] = temp[6];
+            month[1] = temp[7];
+            month[2] = '\0';
+            day[0] = temp[9];
+            day[1] = temp[10];
+            day[2] = '\0';
+
+            int monthNum = atoi(month);
+            int dayNum = atoi(day);
+            int yearNum = atoi(year);
+
+            if(monthNum < 13){
+                  if(dayNum < daysInMonth[monthNum] ){
+                        checker = 1;
+                  }
+            }
+      }
+      return checker;
+}
+
+void formatToDay(char temp[]){//"yyyy-mm-dd"
+      char month[3];
+      char day[3];
+      char year[5];
+
+      year[0] = temp[1];
+      year[1] = temp[2];
+      year[2] = temp[3];
+      year[3] = temp[4];
+      year[4] = '\0';
+      month[0] = temp[6];
+      month[1] = temp[7];
+      month[2] = '\0';
+      day[0] = temp[9];
+      day[1] = temp[10];
+      day[2] = '\0';
+
+      int weekday, tempDay;
+      int monthNum = atoi(month);
+      int dayNum = atoi(day);
+      int yearNum = atoi(year);
+            
+      weekday  = (tempDay += monthNum < 3 ? yearNum-- : yearNum - 2, 23*monthNum/9 + dayNum + 4 + yearNum/4- yearNum/100 + yearNum/400)%7;
+      printf("%s\n", fullDays[weekday]);
+}
+
+void returnDate(char temp[]){
+      char month[3];
+      char day[3];
+      char year[5];
+
+      month[0] = temp[0];
+      month[1] = temp[1];
+      month[2] = '\0';
+      day[0] = temp[3];
+      day[1] = temp[4];
+      day[2] = '\0';
+      year[0] = temp[6];
+      year[1] = temp[7];
+      year[2] = temp[8];
+      year[3] = temp[9];
+      year[4] = '\0';
+
+      int weekday, tempDay;
+      int monthNum = atoi(month);
+      int dayNum = atoi(day);
+      int yearNum = atoi(year);
+            
+      weekday  = (tempDay += monthNum < 3 ? yearNum-- : yearNum - 2, 23*monthNum/9 + dayNum + 4 + yearNum/4- yearNum/100 + yearNum/400)%7;
+      printf("%s %s %d %d \n", days[weekday], noNewLineMonths[monthNum], dayNum, yearNum );
+}
+
+int checkFormat(char temp[]){// 01/11/2019 
+      int checker = 0;
+      char month[3];
+      char day[3];
+      if(temp[2] == '/' && temp[5] == '/'){
+            month[0] = temp[0];
+            month[1] = temp[1];
+            month[2] = '\0';
+            day[0] = temp[3];
+            day[1] = temp[4];
+            day[2] = '\0';
+
+            int monthNum = atoi(month);
+            int dayNum = atoi(day);
+            
+            if(monthNum < 13){
+                  if(dayNum < daysInMonth[monthNum] ){
+                        checker = 1;
+                  }
+            }
+      }
+      return checker;
+}
+
+void currentDate(int formatOption, char temp[]){
+      int monthNum, day,year, weekday, tempDay;
+      monthNum = time_systime.month;
+      day = time_systime.day;
+      year = time_systime.year;
+      weekday  = (tempDay += monthNum < 3 ? year-- : year - 2, 23*monthNum/9 + day + 4 + year/4- year/100 + year/400)%7;
+
+      if(formatOption == 1){ // abbrv name
+            strcat(temp, days[weekday]);
+      }
+      else if(formatOption == 2){ //month name
+            strcat(temp, noNewLineMonths[monthNum]);
+      }
+      else if(formatOption == 3){ //abbrv month
+            strcat(temp, abbrvMonths[monthNum]);
+      }
+      else if(formatOption == 4){ //year
+            char yearString[10];
+            itoa(year, yearString, 10);
+            strcat(temp, yearString);
+      }
+      else if(formatOption == 5){ //week number?????????????
+            getWeekNumber(monthNum, day, year, temp);            
+      }
+      else if(formatOption == 6){
+            strcat(temp, fullDays[weekday]);
+      }
+}
+
+
+void getWeekNumber(int monthNum, int day, int weekday, char temp[]){
+      int dayNumber = 0;
+      for(int count = 0; count < monthNum; count++){
+            dayNumber += daysInMonth[count];
+      }
+      dayNumber += day;
+      int weekNumber = dayNumber / 7;
+      char weekString[10];
+      itoa(weekNumber, weekString, 10);
+      strcat(temp, weekString);
+}
+
+void givenDate(int addDay, int addMonth, int addYear){
+      int monthNum, day, hour, minutes, year, tempDay, weekday;
+      monthNum = time_systime.month + addMonth;
+      day = time_systime.day + addDay;
+      hour = time_systime.hour;
+      hour = hour + 8;
+      minutes = time_systime.min;
+      year = time_systime.year + addYear;
+      weekday  = (tempDay += monthNum < 3 ? year-- : year - 2, 23*monthNum/9 + day + 4 + year/4- year/100 + year/400)%7;
+
+      if(day < 0){
+            monthNum --;
+            day = daysInMonth[monthNum] + day;
+      }
+
+      printf("%s %s %d %d:%d:%d %d \n", days[weekday], noNewLineMonths[monthNum], day, hour, minutes, time_systime.sec, year );
+}
+
+void findSunday(int sunday){
+      int monthNum, day, hour, minutes, year, tempDay, weekday, tempWeekday;
+      
+      monthNum = time_systime.month;
+      day = time_systime.day;
+      hour = time_systime.hour;
+      hour = hour + 8;
+      minutes = time_systime.min;
+      year = time_systime.year;
+      weekday  = (tempDay += monthNum < 3 ? year-- : year - 2, 23*monthNum/9 + day + 4 + year/4- year/100 + year/400)%7;
+
+      if(sunday > 0){
+            tempWeekday = 7 - weekday;
+            day = day + tempWeekday;
+            if(day > daysInMonth[monthNum]){
+                  monthNum++;
+                  day = day - daysInMonth[monthNum];
+            }
+      }
+      else{
+            if(weekday == 0 ){
+                  day = day - 7;
+            }
+            else{
+                  day = day - weekday;
+            }
+            if(day < 1){
+                  monthNum --;
+                  day = daysInMonth[monthNum] + day;
+            }
+      }
+
+      printf("%s %s %d %d:%d:%d %d \n", noNewLineMonths[monthNum], days[0], day, hour, minutes, time_systime.sec, year );
+}
 
 int determinedaycode(int year){
 	int daycode;
@@ -898,11 +1224,11 @@ int determinedaycode(int year){
 
 int determineleapyear(int year){
 	if(year% 4 == 0 && year%100 != 0 || year%400 == 0){
-		days_in_month[2] = 29;
+		daysInMonth[2] = 29;
 		return 1;
 	}
 	else{
-		days_in_month[2] = 28;
+		daysInMonth[2] = 28;
 		return 0;
 	}
 }
@@ -919,7 +1245,7 @@ void calendar(int year, int daycode){
 		}
 		
 		// Print all the dates for one month
-		for ( day = 1; day <= days_in_month[month]; day++ ){
+		for ( day = 1; day <= daysInMonth[month]; day++ ){
 			printf("%2d", day );
 			
 			// Is day before Sat? Else start next line Sun.
@@ -929,7 +1255,7 @@ void calendar(int year, int daycode){
 				printf("\n " );
 		}
 			// Set position for next month
-			daycode = ( daycode + days_in_month[month] ) % 7;
+			daycode = ( daycode + daysInMonth[month] ) % 7;
 	}
 }
 

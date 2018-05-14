@@ -1,5 +1,25 @@
 ICS-OS Commands
 ---------------
+903:         	if (strcmp(u,"-d") == 0){
+906:                        if (strcmp(u,"now") == 0){ 
+909:                        else if (strcmp(u,"yesterday") == 0){
+912:                        else if (strcmp(u,"tomorrow") == 0){
+915:                        else if (strcmp(u,"today") == 0){
+918:                        else if (strcmp(u,"sunday") == 0){
+921:                        else if (strcmp(u,"last-sunday") == 0){ //fucked >:( if march 3 last sunday was feb something
+924:                        else if (strcmp(u,"last-week") == 0){ //fucked >:( if march 3 last week was feb something
+927:                        else if (strcmp(u,"next-week") == 0){
+930:                        else if (strcmp(u,"last-month") == 0){
+933:                        else if (strcmp(u,"last-year") == 0){
+936:                        else if (strcmp(u,"next-year") == 0){
+939:                        else if (strcmp(u[0],'"') == 0){ //if surrounded by quotes (function if ")
+959:            else if (strcmp(u,"+") == 0){// loop thru function to find %
+968:                              if(strcmp(u,"%a") == 0){
+971:                              else if(strcmp(u,"%B") == 0){ //month name
+974:                              else if(strcmp(u,"%b") == 0){ //abbrv month name
+977:                              else if(strcmp(u,"%y") == 0){ //year
+980:                              else if(strcmp(u,"%V") == 0){ //week number
+983:                              else if(strcmp(u,"$A") == 0){ //full weekday name
 cal- Runs the graphics demonstration.
 cd- Changes working directory. Args: <directory>
 cls- Clears the screen. 
