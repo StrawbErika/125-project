@@ -1,31 +1,32 @@
 ICS-OS Commands
 ---------------
-1003:            else if (strcmp(u,"+") == 0){// loop thru function to find %
-1012:                              if(strcmp(u,"%a") == 0){
-1015:                              else if(strcmp(u,"%B") == 0){ //month name
-1018:                              else if(strcmp(u,"%b") == 0){ //abbrv month name
-1021:                              else if(strcmp(u,"%y") == 0){ //year
-1024:                              else if(strcmp(u,"%V") == 0){ //week number
-1027:                              else if(strcmp(u,"$A") == 0){ //full weekday name
-947:         	if (strcmp(u,"-d") == 0){
-950:                        if (strcmp(u,"now") == 0){ 
-953:                        else if (strcmp(u,"yesterday") == 0){
-956:                        else if (strcmp(u,"tomorrow") == 0){
-959:                        else if (strcmp(u,"today") == 0){
-962:                        else if (strcmp(u,"sunday") == 0){
-965:                        else if (strcmp(u,"last-sunday") == 0){ //fucked >:( if march 3 last sunday was feb something
-968:                        else if (strcmp(u,"last-week") == 0){ //fucked >:( if march 3 last week was feb something
-971:                        else if (strcmp(u,"next-week") == 0){
-974:                        else if (strcmp(u,"last-month") == 0){
-977:                        else if (strcmp(u,"last-year") == 0){
-980:                        else if (strcmp(u,"next-year") == 0){
-983:                        else if (strcmp(u[0],'"') == 0){ //if surrounded by quotes (function if ")
-cal- Runs the graphics demonstration.
+1002:                  if(strcmp(u,"sqrt") == 0){ //if it's equal to sqrt
+1117:   if (strcmp(u,"date") == 0){   //date functions
+1123:                        if (strcmp(u,"now") == 0){ //date -d now
+1126:                        else if (strcmp(u,"yesterday") == 0){ //date -d yesterday
+1129:                        else if (strcmp(u,"tomorrow") == 0){ //date -d tomorrow
+1132:                        else if (strcmp(u,"today") == 0){ //date -d today
+1135:                        else if (strcmp(u,"sunday") == 0){ //date -d sunday
+1138:                        else if (strcmp(u,"last-sunday") == 0){ // date -d last-sunday
+1141:                        else if (strcmp(u,"last-week") == 0){ //date -d last-week
+1144:                        else if (strcmp(u,"next-week") == 0){ //date -d next-week
+1147:                        else if (strcmp(u,"last-month") == 0){ //date -d last-month
+1150:                        else if (strcmp(u,"last-year") == 0){ // date -d last-year
+1153:                        else if (strcmp(u,"next-year") == 0){
+1156:                        else if (strcmp(u[0],'"') == 0){ // date -d date -d "yyyy-mm-dd" +"%A" prints day of the week of the date
+1176:            else if (strcmp(u,"+") == 0){// date + string 
+1185:                              if(strcmp(u,"%a") == 0){ //abbrv weekday
+1188:                              else if(strcmp(u,"%B") == 0){ //month name
+1191:                              else if(strcmp(u,"%b") == 0){ //abbrv month name
+1194:                              else if(strcmp(u,"%y") == 0){ //year
+1197:                              else if(strcmp(u,"%V") == 0){ //week number
+1200:                              else if(strcmp(u,"$A") == 0){ //full weekday name
+986:      if (strcmp(u,"cal") == 0){ // cal 2018 , displays the calendar of a specific year
 cd- Changes working directory. Args: <directory>
 cls- Clears the screen. 
 copy- Copy source to destination: Args: <source> <destination>
 cpuid- Displays CPU information. 
-date- Displays date and time.
+-dd flag
 del- Deletes a files or directory. Args: <filename/dirname>
 demo_graphics- Runs the graphics demonstration.
 echo- Displays a string. Args: <string>  
@@ -33,7 +34,7 @@ exit- Exits a console session.
 fgman-  Foreground manager
 files- Shows list of currently open files.
 find- Finds a file.
-gcalccmd- Displays date and time.
+gcalccmd- gcalccmd command
 help- Displays this help screen.
 kill- Kills a kernel thread. Args: <thread name>
 libinfo- Shows library information.

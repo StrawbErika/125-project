@@ -103,41 +103,42 @@ char *fullDays[]={
 	"Saturday"
 };
 
+
 double powerOfTen(int num){
-     double rst = 1.0;
+     double result = 1.0;
      if(num >= 0){
          for(int i = 0; i < num ; i++){
-             rst *= 10.0;
+             result *= 10.0;
          }
      }else{
          for(int i = 0; i < (0 - num ); i++){
-            rst *= 0.1;
+            result *= 0.1;
         }
     }
-    return rst;
+    return result;
  }
 
 double squareRoot(double a)
 {
      double z = a; 
-     double rst = 0.0;
+     double result = 0.0;
      int max = 8;     // to define maximum digit 
      int i;
      double j = 1.0;
      for(i = max ; i > 0 ; i--){
          // value must be bigger then 0
-        if(z - (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
+        if(z - (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
          {
-             while( z - (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
+             while( z - (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
              {
                  j++;
                  if(j >= 10) break;
 
              }
              j--; //correct the extra value by minus one to j
-             z -= (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)); //find value of z
+             z -= (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)); //find value of z
  
-             rst += j * powerOfTen(i);     // find sum of a
+             result += j * powerOfTen(i);     // find sum of a
 
              j = 1.0;
  
@@ -147,47 +148,45 @@ double squareRoot(double a)
       }
 
       for(i = 0 ; i >= 0 - max ; i--){
-          if(z - (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
+          if(z - (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
           {
-              while( z - (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
+              while( z - (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
               {
                   j++;
 
               }
               j--;
-              z -= (( 2 * rst ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)); //find value of z
+              z -= (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)); //find value of z
  
-              rst += j * powerOfTen(i);     // find sum of a
+              result += j * powerOfTen(i);     // find sum of a
               j = 1.0;
            }
       }
       // find the number on each digit
-      return rst;
+      return result;
  }
 
-#define LIMIT 1000
+#define LIMIT 1000   //limit of stack 
 
-int stack[LIMIT];
-int TOS = 0;
+int stack[LIMIT]; //define stack array with limit of 1000
+int TOS = 0; //TOS is initalized to 0
 
 
  void push(int x){
-  // Insert code here
-  if(TOS<LIMIT){
-    stack[TOS] = x;
-    TOS++;
+  if(TOS<LIMIT){  //if TOS  is less than the limit, you can still push
+    stack[TOS] = x;  //stack[TOS] is initialized to x
+    TOS++; //TOS is incremented
   }else{
-    printf("\nStack Overflow!");
+    printf("\nInvalid Command!");
     exit(1);
   }
 }
 
 int pop(){
-  // Insert code here
-  if(TOS>0){
-    return stack[--TOS];
+  if(TOS>0){   //if TOS > 0, you can push - stack has elements
+    return stack[--TOS];   //returns the element that is being popped
   }else{
-    printf("\nStack Underflow!");
+    printf("\nInvalid Command!");
     exit(1);
   }
 }  
@@ -993,27 +992,33 @@ int console_execute(const char *str){
             calendar(year, daycode);
             printf("\n");
    }else
-   if (strcmp(u,"gcalccmd") == 0){
-      if (u!=0){
-            char temp[1000];
-            temp[0] = '\0'; // >:(
-            while(u!=NULL){ 
-                  u=strtok(0," "); //date + message this is
-                  if(strcmp(u,"sqrt") == 0){
-                     u=strtok(0," ");
-                     if (u!=NULL){
+   if (strcmp(u,"gcalccmd") == 0){   //-- gcalccmd command
+      if (u!=0){  //if u is not empty
+            char temp[1000]; //initialize char array temp//string
+            int sqrtchecker = 0; //to check if sqrt was used or not
+            temp[0] = '\0'; //initialize temp to empty 
+            while(u!=NULL){   //if u is not equal to null
+                  u=strtok(0," "); //gets the next value in u
+                  if(strcmp(u,"sqrt") == 0){ //if it's equal to sqrt
+                     u=strtok(0," ");  //gets the next value in u
+                     if (u!=NULL){  //if not null,
                         float val = atoi(u);
                         int result = squareRoot(val);
-                        printf("%d\n", result);
+                        printf("%d\n", result); //compute for sqrt
+                        u[0] = '\0';
+                        sqrtchecker = 1; //set sqrtchecker to 1
                      } 
                      break;
+                  } else {
+                     strcat(temp, u); //hoi pls potato , hoiplspotato
+                     sqrtchecker = 0;
                   }
-                  strcat(temp, u); //hoi pls potato , hoiplspotato
             }
+
             int length = strlen(temp);
             temp[length-2] = ' ';  
             temp[length-1] = '\0';  
-            printf("This iz temp: %s \n", temp);
+            //printf("This iz temp: %s \n", temp);
             
             /*char temporary;
             char number[1000];
