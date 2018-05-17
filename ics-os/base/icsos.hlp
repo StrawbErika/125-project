@@ -1,5 +1,26 @@
 ICS-OS Commands
 ---------------
+1118:         	if (strcmp(u,"-d") == 0){
+1121:                        if (strcmp(u,"now") == 0){ 
+1124:                        else if (strcmp(u,"yesterday") == 0){
+1127:                        else if (strcmp(u,"tomorrow") == 0){
+1130:                        else if (strcmp(u,"today") == 0){
+1133:                        else if (strcmp(u,"sunday") == 0){
+1136:                        else if (strcmp(u,"last-sunday") == 0){ //fucked >:( if march 3 last sunday was feb something
+1139:                        else if (strcmp(u,"last-week") == 0){ //fucked >:( if march 3 last week was feb something
+1142:                        else if (strcmp(u,"next-week") == 0){
+1145:                        else if (strcmp(u,"last-month") == 0){
+1148:                        else if (strcmp(u,"last-year") == 0){
+1151:                        else if (strcmp(u,"next-year") == 0){
+1154:                        else if (strcmp(u[0],'"') == 0){ //if surrounded by quotes (function if ")
+1174:            else if (strcmp(u,"+") == 0){// loop thru function to find %
+1183:                              if(strcmp(u,"%a") == 0){
+1186:                              else if(strcmp(u,"%B") == 0){ //month name
+1189:                              else if(strcmp(u,"%b") == 0){ //abbrv month name
+1192:                              else if(strcmp(u,"%y") == 0){ //year
+1195:                              else if(strcmp(u,"%V") == 0){ //week number
+1198:                              else if(strcmp(u,"$A") == 0){ //full weekday name
+997:                  if(strcmp(u,"sqrt") == 0){
 cal- Runs the graphics demonstration.
 cd- Changes working directory. Args: <directory>
 cls- Clears the screen. 
@@ -13,6 +34,7 @@ exit- Exits a console session.
 fgman-  Foreground manager
 files- Shows list of currently open files.
 find- Finds a file.
+gcalccmd- Displays date and time.
 help- Displays this help screen.
 kill- Kills a kernel thread. Args: <thread name>
 libinfo- Shows library information.
