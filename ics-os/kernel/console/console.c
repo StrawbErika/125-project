@@ -1105,11 +1105,6 @@ int console_execute(const char *str){
               result = pop();
 
               printf("evaluation of %s: %d\n", temp, result);
-
-               
-
-               
-
                
       }
 
@@ -1204,6 +1199,10 @@ int console_execute(const char *str){
                                     strcat(temp, u);
                               }
                         }
+                        int length = strlen(temp);
+                        temp[length-2] = ' ';  
+                        temp[length-1] = '\0';  
+
                         printf("%s\n", temp);
                   }
             }
