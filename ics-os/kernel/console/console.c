@@ -27,9 +27,10 @@
 
 #include "console.h"
 
-/*A console mode get string function terminates
-upon receving \r */
+//end of the months
 int daysInMonth[]={0,31,28,31,30,31,30,31,31,30,31,30,31};
+
+//month formats 
 char *months[]={
 	" ",
 	"\n\n\nJanuary",
@@ -45,6 +46,8 @@ char *months[]={
 	"\n\n\nNovember",
 	"\n\n\nDecember"
 };
+
+//month for printing
 char *noNewLineMonths[]={
 	" ",
 	"January",
@@ -61,7 +64,7 @@ char *noNewLineMonths[]={
 	"December"
 };
 
-
+//abbreviated month format
 char *abbrvMonths[]={
 	" ",
 	"Jan",
@@ -77,6 +80,8 @@ char *abbrvMonths[]={
 	"Nov",
 	"Dec"
 };
+
+//abbrv day format 
 char *days[]={
 	"Sun",
 	"Mon",
@@ -87,6 +92,7 @@ char *days[]={
 	"Sat"
 };
 
+//full day format
 char *fullDays[]={
 	"Sunday",
 	"Monday",
@@ -97,6 +103,96 @@ char *fullDays[]={
 	"Saturday"
 };
 
+
+double powerOfTen(int num){
+     double result = 1.0;
+     if(num >= 0){
+         for(int i = 0; i < num ; i++){
+             result *= 10.0;
+         }
+     }else{
+         for(int i = 0; i < (0 - num ); i++){
+            result *= 0.1;
+        }
+    }
+    return result;
+ }
+
+double squareRoot(double a)
+{
+     double z = a; 
+     double result = 0.0;
+     int max = 8;     // to define maximum digit 
+     int i;
+     double j = 1.0;
+     for(i = max ; i > 0 ; i--){
+         // value must be bigger then 0
+        if(z - (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
+         {
+             while( z - (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
+             {
+                 j++;
+                 if(j >= 10) break;
+
+             }
+             j--; //correct the extra value by minus one to j
+             z -= (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)); //find value of z
+ 
+             result += j * powerOfTen(i);     // find sum of a
+
+             j = 1.0;
+ 
+ 
+           }
+ 
+      }
+
+      for(i = 0 ; i >= 0 - max ; i--){
+          if(z - (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
+          {
+              while( z - (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)) >= 0)
+              {
+                  j++;
+
+              }
+              j--;
+              z -= (( 2 * result ) + ( j * powerOfTen(i)))*( j * powerOfTen(i)); //find value of z
+ 
+              result += j * powerOfTen(i);     // find sum of a
+              j = 1.0;
+           }
+      }
+      // find the number on each digit
+      return result;
+ }
+
+#define LIMIT 1000   //limit of stack 
+
+int stack[LIMIT]; //define stack array with limit of 1000
+int TOS = 0; //TOS is initalized to 0
+
+
+ void push(int x){
+  if(TOS<LIMIT){  //if TOS  is less than the limit, you can still push
+    stack[TOS] = x;  //stack[TOS] is initialized to x
+    TOS++; //TOS is incremented
+  }else{
+    printf("\nInvalid Command!");
+    exit(1);
+  }
+}
+
+int pop(){
+  if(TOS>0){   //if TOS > 0, you can push - stack has elements
+    return stack[--TOS];   //returns the element that is being popped
+  }else{
+    printf("\nInvalid Command!");
+    exit(1);
+  }
+}  
+
+/*A console mode get string function terminates
+upon receving \r */
 void getstring(char *buf, DEX32_DDL_INFO *dev){
    unsigned int i=0;
    char c;
@@ -887,7 +983,7 @@ int console_execute(const char *str){
          printf("console: cannot find device.\n");
       }   
    }else
-      if (strcmp(u,"cal") == 0){   //-- Runs the graphics demonstration.
+      if (strcmp(u,"cal") == 0){ // cal 2018 , displays the calendar of a specific year
             u=strtok(0," ");
             int  i = atoi (u);
             int year = i;
@@ -895,56 +991,172 @@ int console_execute(const char *str){
             determineleapyear(year);
             calendar(year, daycode);
             printf("\n");
-   }
-   else
-   if (strcmp(u,"date") == 0){   //-- Displays date and time.
+   }else
+   if (strcmp(u,"gcalccmd") == 0){   //-- gcalccmd command
+      if (u!=0){  //if u is not empty
+            char temp[1000]; //initialize char array temp//string
+            int sqrtchecker = 0; //to check if sqrt was used or not
+            temp[0] = '\0'; //initialize temp to empty 
+            while(u!=NULL){   //if u is not equal to null
+                  u=strtok(0," "); //gets the next value in u
+                  if(strcmp(u,"sqrt") == 0){ //if it's equal to sqrt
+                     u=strtok(0," ");  //gets the next value in u
+                     if (u!=NULL){  //if not null,
+                        float val = atoi(u);
+                        int result = squareRoot(val);
+                        printf("%d\n", result); //compute for sqrt
+                        u[0] = '\0';
+                        sqrtchecker = 1; //set sqrtchecker to 1
+                     } 
+                     break;
+                  } else {
+                     strcat(temp, u); //hoi pls potato , hoiplspotato
+                     sqrtchecker = 0;
+                  }
+            }
+
+            int length = strlen(temp);
+            temp[length-2] = ' ';  
+            temp[length-1] = '\0';  
+            //printf("This iz temp: %s \n", temp);
+            
+            /*char temporary;
+            char number[1000];
+            number[0] = '\0';
+            char tokenList[1000][1000];
+            int count = 0;
+            int countNum = 0;
+            for(int j = 0; j < strlen(temp); j++){
+                  temporary= temp[j]; 
+                  if((temporary == '*') || (temporary == '/') || ( temporary == '+') || (temporary == '-') || (temporary == '(') || (temporary == ')') || (temporary == ' ')){
+                        countNum = 0;
+                        if(number[0] == '\0'){
+                           tokenList[count][0]=temporary; 
+                           count++;
+
+                        }else{
+                           int len = strlen(number);
+                           for(int n = 0; n < len; n++){
+                                 tokenList[count][n] = number[n]; 
+                           }
+                           number[0] = '\0'; // >:(
+                           count++;
+                           tokenList[count][0]=temporary; 
+                           count++;
+                           
+                        }
+                  }
+                  else{
+                        number[countNum] = temporary;
+                        number[countNum + 1] = '\0';
+                        countNum++;
+                  }
+            }
+            count--;
+            
+            for(int n = 0; n < count; n++){
+                  printf("TEMP %d: %s \n",n, tokenList[n]);
+            }
+         tokenList[0][0] = '\0';*/
+
+              /*char postfix[20];*/
+              
+              int i,x,y,z;
+              int result=0;
+              int tempo;
+              
+              /*printf("Enter expression in POSTFIX FORM: ");
+              scanf("%s", postfix);*/
+              
+              for(i=0;i<strlen(temp);i++){
+                tempo = temp[i];
+               
+               /*
+                  Insert your code here to evaluate the postfix expression.
+               */
+
+                if(tempo>=48 && tempo<=57){   //Operand
+                  tempo = tempo - 48;
+                  push(tempo);
+                }else if(tempo == 42){   //Multiplication (* = 42)
+                  x = pop();
+                  y = pop();
+                  z = y * x;
+                  push(z);
+                }else if(tempo == 43){   //Addition (+ = 43)
+                  x = pop();
+                  y = pop();
+                  z = y + x;
+                  push(z);
+                }else if(tempo == 45){   //Subtraction (- = 45)
+                  x = pop();
+                  y = pop();
+                  z = y - x;
+                  push(z);
+                }else if(tempo == 47){   //Division (/ = 47)
+                  x = pop();
+                  y = pop();
+                  z = y / x;
+                  push(z);
+                }
+
+              }
+
+              result = pop();
+
+              printf("evaluation of %s: %d\n", temp, result);
+               
+      }
+
+   }else  
+   if (strcmp(u,"date") == 0){   //date functions
       u=strtok(0," ");
       if (u!=0){
-         	if (strcmp(u,"-d") == 0){
+         	if (strcmp(u,"-d") == 0){ //-d flag
                   u=strtok(0," ");
                   if (u!=0){
-                        if (strcmp(u,"now") == 0){ 
+                        if (strcmp(u,"now") == 0){ //date -d now
                               givenDate(0, 0, 0);
                         }
-                        else if (strcmp(u,"yesterday") == 0){
+                        else if (strcmp(u,"yesterday") == 0){ //date -d yesterday
                               givenDate(-1, 0, 0);
                         }
-                        else if (strcmp(u,"tomorrow") == 0){
+                        else if (strcmp(u,"tomorrow") == 0){ //date -d tomorrow
                               givenDate(1, 0, 0);
                         }
-                        else if (strcmp(u,"today") == 0){
+                        else if (strcmp(u,"today") == 0){ //date -d today
                               givenDate(0, 0, 0);
                         }
-                        else if (strcmp(u,"sunday") == 0){
+                        else if (strcmp(u,"sunday") == 0){ //date -d sunday
                               findSunday(1);
                         }
-                        else if (strcmp(u,"last-sunday") == 0){ //fucked >:( if march 3 last sunday was feb something
+                        else if (strcmp(u,"last-sunday") == 0){ // date -d last-sunday
                               findSunday(-1);
                         }
-                        else if (strcmp(u,"last-week") == 0){ //fucked >:( if march 3 last week was feb something
+                        else if (strcmp(u,"last-week") == 0){ //date -d last-week
                               givenDate(-7, 0, 0);
                         }
-                        else if (strcmp(u,"next-week") == 0){
+                        else if (strcmp(u,"next-week") == 0){ //date -d next-week
                               givenDate(+7, 0, 0);
                         }
-                        else if (strcmp(u,"last-month") == 0){
+                        else if (strcmp(u,"last-month") == 0){ //date -d last-month
                               givenDate(0, -1, 0);
                         }
-                        else if (strcmp(u,"last-year") == 0){
+                        else if (strcmp(u,"last-year") == 0){ // date -d last-year
                               givenDate(0, 0, -1);
                         }
                         else if (strcmp(u,"next-year") == 0){
                               givenDate(0, 0, 1);
                         }
-                        else if (strcmp(u[0],'"') == 0){ //if surrounded by quotes (function if ")
-                              if(checkDateFormat(u) == 1){
+                        else if (strcmp(u[0],'"') == 0){ // date -d date -d "yyyy-mm-dd" +"%A" prints day of the week of the date
+                              if(checkDateFormat(u) == 1){ //checks if fits format
                                     formatToDay(u);
                               }
                               else{
                                     printf("Invalid date function\n");
                               }
                         }
-                        else{ //if 02/02/2018 or 2018/02/02
+                        else{ // date -d 02/02/2018
                               if(checkFormat(u) == 1){
                                     returnDate(u);
                               }
@@ -956,16 +1168,16 @@ int console_execute(const char *str){
                         printf("Invalid date function");
                   }
             }
-            else if (strcmp(u,"+") == 0){// loop thru function to find %
+            else if (strcmp(u,"+") == 0){// date + string 
                   if(u!=0){
                         char temp[1000];
 
                         temp[0] = '\0';
 
-                        while(u!=NULL){
-                              u=strtok(0," "); //date + hoi this is date
-                              strcat(temp, " "); //hoi pls potato , hoiplspotato
-                              if(strcmp(u,"%a") == 0){
+                        while(u!=NULL){ //loops whole sting to find the format
+                              u=strtok(0," "); 
+                              strcat(temp, " ");
+                              if(strcmp(u,"%a") == 0){ //abbrv weekday
                                     currentDate(1, temp);
                               }
                               else if(strcmp(u,"%B") == 0){ //month name
@@ -984,9 +1196,13 @@ int console_execute(const char *str){
                                     currentDate(6, temp);
                               }
                               else{
-                                    strcat(temp, u); //hoi pls potato , hoiplspotato
+                                    strcat(temp, u);
                               }
                         }
+                        int length = strlen(temp);
+                        temp[length-2] = ' ';  
+                        temp[length-1] = '\0';  
+
                         printf("%s\n", temp);
                   }
             }
@@ -1005,10 +1221,7 @@ int console_execute(const char *str){
    return 1;
 };
 
-// date -d "yyyy-mm-dd" +"%A"
-		// Determine which day of the week a given date was
-
-int checkDateFormat(char temp[]){// 01/11/2019 
+int checkDateFormat(char temp[]){// check if fits yyyy-mm-dd 
       int checker = 0;
       char month[3];
       char day[3];
@@ -1040,7 +1253,7 @@ int checkDateFormat(char temp[]){// 01/11/2019
       return checker;
 }
 
-void formatToDay(char temp[]){//"yyyy-mm-dd"
+void formatToDay(char temp[]){//prints the weekday 
       char month[3];
       char day[3];
       char year[5];
@@ -1066,7 +1279,7 @@ void formatToDay(char temp[]){//"yyyy-mm-dd"
       printf("%s\n", fullDays[weekday]);
 }
 
-void returnDate(char temp[]){
+void returnDate(char temp[]){ //prints out the date 
       char month[3];
       char day[3];
       char year[5];
@@ -1092,7 +1305,7 @@ void returnDate(char temp[]){
       printf("%s %s %d %d \n", days[weekday], noNewLineMonths[monthNum], dayNum, yearNum );
 }
 
-int checkFormat(char temp[]){// 01/11/2019 
+int checkFormat(char temp[]){// checks if mm/dd/yyyy 
       int checker = 0;
       char month[3];
       char day[3];
@@ -1116,7 +1329,7 @@ int checkFormat(char temp[]){// 01/11/2019
       return checker;
 }
 
-void currentDate(int formatOption, char temp[]){
+void currentDate(int formatOption, char temp[]){ //formats the string with appropriate format tags
       int monthNum, day,year, weekday, tempDay;
       monthNum = time_systime.month;
       day = time_systime.day;
@@ -1137,7 +1350,7 @@ void currentDate(int formatOption, char temp[]){
             itoa(year, yearString, 10);
             strcat(temp, yearString);
       }
-      else if(formatOption == 5){ //week number?????????????
+      else if(formatOption == 5){ //week number
             getWeekNumber(monthNum, day, year, temp);            
       }
       else if(formatOption == 6){
@@ -1148,17 +1361,17 @@ void currentDate(int formatOption, char temp[]){
 
 void getWeekNumber(int monthNum, int day, int weekday, char temp[]){
       int dayNumber = 0;
-      for(int count = 0; count < monthNum; count++){
+      for(int count = 0; count < monthNum; count++){ //adds all end of the month
             dayNumber += daysInMonth[count];
       }
       dayNumber += day;
-      int weekNumber = dayNumber / 7;
+      int weekNumber = dayNumber / 7; //divide by 7 to get week number
       char weekString[10];
       itoa(weekNumber, weekString, 10);
       strcat(temp, weekString);
 }
 
-void givenDate(int addDay, int addMonth, int addYear){
+void givenDate(int addDay, int addMonth, int addYear){ //adjust date by how much days/months/years back/forward
       int monthNum, day, hour, minutes, year, tempDay, weekday;
       monthNum = time_systime.month + addMonth;
       day = time_systime.day + addDay;
@@ -1176,7 +1389,7 @@ void givenDate(int addDay, int addMonth, int addYear){
       printf("%s %s %d %d:%d:%d %d \n", days[weekday], noNewLineMonths[monthNum], day, hour, minutes, time_systime.sec, year );
 }
 
-void findSunday(int sunday){
+void findSunday(int sunday){ //finds the sunday given a positive (sunday) or negative (last-sunday)
       int monthNum, day, hour, minutes, year, tempDay, weekday, tempWeekday;
       
       monthNum = time_systime.month;
@@ -1211,10 +1424,10 @@ void findSunday(int sunday){
       printf("%s %s %d %d:%d:%d %d \n", noNewLineMonths[monthNum], days[0], day, hour, minutes, time_systime.sec, year );
 }
 
-int determinedaycode(int year){
+int determinedaycode(int year){ //determines position of first day of january
 	int daycode;
 	int d1, d2, d3;
-	
+
 	d1 = (year - 1)/ 4.0;
 	d2 = (year - 1)/ 100;
 	d3 = (year - 1)/ 400;
@@ -1222,7 +1435,7 @@ int determinedaycode(int year){
 	return daycode;
 }
 
-int determineleapyear(int year){
+int determineleapyear(int year){//checks if leap year
 	if(year% 4 == 0 && year%100 != 0 || year%400 == 0){
 		daysInMonth[2] = 29;
 		return 1;
@@ -1238,30 +1451,27 @@ void calendar(int year, int daycode){
 	for ( month = 1; month <= 12; month++ ){
 		printf("%s", months[month]);
 		printf("\n\nSun  Mon  Tue  Wed  Thu  Fri  Sat\n" );
-		
-		// Correct the position for the first date
+
+		// prints out space for the correct position of first day
 		for ( day = 1; day <= 1 + daycode * 5; day++ ){
 			printf(" ");
 		}
-		
+
 		// Print all the dates for one month
 		for ( day = 1; day <= daysInMonth[month]; day++ ){
 			printf("%2d", day );
 			
-			// Is day before Sat? Else start next line Sun.
+			// if sunday, start new line
 			if ( ( day + daycode ) % 7 > 0 )
 				printf("   " );
 			else
 				printf("\n " );
 		}
-			// Set position for next month
+			// get new daycode for the first day
 			daycode = ( daycode + daysInMonth[month] ) % 7;
 	}
 }
 
-int getDayName(int day, int month, int year){
-
-}
 int console_new(){
    //create a new console         
    char consolename[255];

@@ -1,31 +1,32 @@
 ICS-OS Commands
 ---------------
-903:         	if (strcmp(u,"-d") == 0){
-906:                        if (strcmp(u,"now") == 0){ 
-909:                        else if (strcmp(u,"yesterday") == 0){
-912:                        else if (strcmp(u,"tomorrow") == 0){
-915:                        else if (strcmp(u,"today") == 0){
-918:                        else if (strcmp(u,"sunday") == 0){
-921:                        else if (strcmp(u,"last-sunday") == 0){ //fucked >:( if march 3 last sunday was feb something
-924:                        else if (strcmp(u,"last-week") == 0){ //fucked >:( if march 3 last week was feb something
-927:                        else if (strcmp(u,"next-week") == 0){
-930:                        else if (strcmp(u,"last-month") == 0){
-933:                        else if (strcmp(u,"last-year") == 0){
-936:                        else if (strcmp(u,"next-year") == 0){
-939:                        else if (strcmp(u[0],'"') == 0){ //if surrounded by quotes (function if ")
-959:            else if (strcmp(u,"+") == 0){// loop thru function to find %
-968:                              if(strcmp(u,"%a") == 0){
-971:                              else if(strcmp(u,"%B") == 0){ //month name
-974:                              else if(strcmp(u,"%b") == 0){ //abbrv month name
-977:                              else if(strcmp(u,"%y") == 0){ //year
-980:                              else if(strcmp(u,"%V") == 0){ //week number
-983:                              else if(strcmp(u,"$A") == 0){ //full weekday name
-cal- Runs the graphics demonstration.
+1002:                  if(strcmp(u,"sqrt") == 0){ //if it's equal to sqrt
+1112:   if (strcmp(u,"date") == 0){   //date functions
+1118:                        if (strcmp(u,"now") == 0){ //date -d now
+1121:                        else if (strcmp(u,"yesterday") == 0){ //date -d yesterday
+1124:                        else if (strcmp(u,"tomorrow") == 0){ //date -d tomorrow
+1127:                        else if (strcmp(u,"today") == 0){ //date -d today
+1130:                        else if (strcmp(u,"sunday") == 0){ //date -d sunday
+1133:                        else if (strcmp(u,"last-sunday") == 0){ // date -d last-sunday
+1136:                        else if (strcmp(u,"last-week") == 0){ //date -d last-week
+1139:                        else if (strcmp(u,"next-week") == 0){ //date -d next-week
+1142:                        else if (strcmp(u,"last-month") == 0){ //date -d last-month
+1145:                        else if (strcmp(u,"last-year") == 0){ // date -d last-year
+1148:                        else if (strcmp(u,"next-year") == 0){
+1151:                        else if (strcmp(u[0],'"') == 0){ // date -d date -d "yyyy-mm-dd" +"%A" prints day of the week of the date
+1171:            else if (strcmp(u,"+") == 0){// date + string 
+1180:                              if(strcmp(u,"%a") == 0){ //abbrv weekday
+1183:                              else if(strcmp(u,"%B") == 0){ //month name
+1186:                              else if(strcmp(u,"%b") == 0){ //abbrv month name
+1189:                              else if(strcmp(u,"%y") == 0){ //year
+1192:                              else if(strcmp(u,"%V") == 0){ //week number
+1195:                              else if(strcmp(u,"$A") == 0){ //full weekday name
+986:      if (strcmp(u,"cal") == 0){ // cal 2018 , displays the calendar of a specific year
 cd- Changes working directory. Args: <directory>
 cls- Clears the screen. 
 copy- Copy source to destination: Args: <source> <destination>
 cpuid- Displays CPU information. 
-date- Displays date and time.
+-dd flag
 del- Deletes a files or directory. Args: <filename/dirname>
 demo_graphics- Runs the graphics demonstration.
 echo- Displays a string. Args: <string>  
@@ -33,6 +34,7 @@ exit- Exits a console session.
 fgman-  Foreground manager
 files- Shows list of currently open files.
 find- Finds a file.
+gcalccmd- gcalccmd command
 help- Displays this help screen.
 kill- Kills a kernel thread. Args: <thread name>
 libinfo- Shows library information.
