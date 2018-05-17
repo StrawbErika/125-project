@@ -1380,7 +1380,7 @@ void findSunday(int sunday){ //finds the sunday given a positive (sunday) or neg
             }
       }
 
-      printf("%s %s %d %d:%d:%d %d \n", noNewLineMonths[monthNum], days[0], day, hour, minutes, time_systime.sec, year );
+      printf("%s %s %d %d:%d:%d %d \n", days[0], noNewLineMonths[monthNum], day, hour, minutes, time_systime.sec, year );
 }
 
 int determinedaycode(int year){ //determines position of first day of january
