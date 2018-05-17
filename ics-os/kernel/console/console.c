@@ -142,7 +142,6 @@ double squareRoot(double a)
 
              j = 1.0;
  
- 
            }
  
       }
@@ -1018,82 +1017,38 @@ int console_execute(const char *str){
             int length = strlen(temp);
             temp[length-2] = ' ';  
             temp[length-1] = '\0';  
-            //printf("This iz temp: %s \n", temp);
-            
-            /*char temporary;
-            char number[1000];
-            number[0] = '\0';
-            char tokenList[1000][1000];
-            int count = 0;
-            int countNum = 0;
-            for(int j = 0; j < strlen(temp); j++){
-                  temporary= temp[j]; 
-                  if((temporary == '*') || (temporary == '/') || ( temporary == '+') || (temporary == '-') || (temporary == '(') || (temporary == ')') || (temporary == ' ')){
-                        countNum = 0;
-                        if(number[0] == '\0'){
-                           tokenList[count][0]=temporary; 
-                           count++;
-
-                        }else{
-                           int len = strlen(number);
-                           for(int n = 0; n < len; n++){
-                                 tokenList[count][n] = number[n]; 
-                           }
-                           number[0] = '\0'; // >:(
-                           count++;
-                           tokenList[count][0]=temporary; 
-                           count++;
-                           
-                        }
-                  }
-                  else{
-                        number[countNum] = temporary;
-                        number[countNum + 1] = '\0';
-                        countNum++;
-                  }
-            }
-            count--;
-            
-            for(int n = 0; n < count; n++){
-                  printf("TEMP %d: %s \n",n, tokenList[n]);
-            }
-         tokenList[0][0] = '\0';*/
-
-              /*char postfix[20];*/
               
               int i,x,y,z;
               int result=0;
               int tempo;
-              
-              /*printf("Enter expression in POSTFIX FORM: ");
-              scanf("%s", postfix);*/
-              
-              for(i=0;i<strlen(temp);i++){
-                tempo = temp[i];
-               
-               /*
-                  Insert your code here to evaluate the postfix expression.
-               */
-
-                if(tempo>=48 && tempo<=57){   //Operand
+                            
+            if(sqrtchecker==0){   //if didn't pass through sqrt
+              for(i=0;i<strlen(temp);i++){   //traverses through temp 
+                tempo = temp[i]; //tempo = each character in temp
+            
+                if(tempo>=48 && tempo<=57){   //Operand - checks it's code in ASCII
                   tempo = tempo - 48;
                   push(tempo);
-                }else if(tempo == 42){   //Multiplication (* = 42)
+                }else if(tempo == 42){   //Multiplication (* = 42 in ASCII)
+                  
                   x = pop();
                   y = pop();
                   z = y * x;
                   push(z);
-                }else if(tempo == 43){   //Addition (+ = 43)
+                }else if(tempo == 43){   //Addition (+ = 43 in ASCII)
+                  
                   x = pop();
                   y = pop();
                   z = y + x;
                   push(z);
-                }else if(tempo == 45){   //Subtraction (- = 45)
+                }else if(tempo == 45){   //Subtraction (- = 45 in ASCII)
+                  
                   x = pop();
                   y = pop();
                   z = y - x;
                   push(z);
-                }else if(tempo == 47){   //Division (/ = 47)
+                }else if(tempo == 47){   //Division (/ = 47 in ASCII)
+                  
                   x = pop();
                   y = pop();
                   z = y / x;
@@ -1102,10 +1057,14 @@ int console_execute(const char *str){
 
               }
 
-              result = pop();
+              /*
+               the code basically checks if it's a number, pushes it and if it's an operand, pops the last two operands in the stack then pushes the result
+              */
 
-              printf("evaluation of %s: %d\n", temp, result);
-               
+              result = pop(); //pops the final result
+              
+               printf("result is: %d\n", result);   //prints it 
+           }
       }
 
    }else  
